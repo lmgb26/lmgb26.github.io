@@ -1,5 +1,4 @@
-
-<html lang="en">
+html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +9,9 @@
             padding: 0;
             overflow: hidden;
             background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         .flag {
@@ -18,9 +20,18 @@
             height: 50px;
             pointer-events: none;
         }
+        
+        .postit {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            width: 80%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body>
+    <img src="postit.jpg" class="postit" alt="Save the date">
     <script>
         class Flag {
             constructor() {
