@@ -102,7 +102,6 @@
         const flags = [];
         for (let i = 0; i < 17; i++) flags.push(new Flag());
 
-        // Returns the forbidden zone — the post-it centre minus the allowed overlap (~75px ≈ 2cm)
         function getForbiddenZone() {
             const overlap = 75;
             const cx = window.innerWidth  / 2;
@@ -129,7 +128,6 @@
             `;
             document.body.appendChild(el);
 
-            // Start outside the forbidden zone
             let x, y;
             const fz = getForbiddenZone();
             do {
@@ -139,7 +137,6 @@
 
             let sx = (Math.random() - 0.5) * 1.32;
             let sy = (Math.random() - 0.5) * 1.32;
-            // Make sure neither speed is too close to zero
             if (Math.abs(sx) < 0.4) sx = sx < 0 ? -0.4 : 0.4;
             if (Math.abs(sy) < 0.4) sy = sy < 0 ? -0.4 : 0.4;
 
@@ -152,17 +149,14 @@
                     x += sx;
                     y += sy;
 
-                    // Bounce off screen edges
                     if (x <= 0 || x >= window.innerWidth  - W) sx = -sx;
                     if (y <= 0 || y >= window.innerHeight - H) sy = -sy;
 
-                    // Bounce off forbidden zone (post-it centre)
                     const fz = getForbiddenZone();
                     const inX = x + W > fz.left && x < fz.right;
                     const inY = y + H > fz.top  && y < fz.bottom;
 
                     if (inX && inY) {
-                        // Find which axis has the smallest penetration and bounce that axis
                         const dLeft   = (x + W) - fz.left;
                         const dRight  = fz.right  - x;
                         const dTop    = (y + H)   - fz.top;
@@ -173,7 +167,6 @@
 
                         if (minH <= minV) {
                             sx = -sx;
-                            // Push out so we don't get stuck
                             x += sx * 2;
                         } else {
                             sy = -sy;
@@ -191,11 +184,12 @@
             };
         }
 
-        const rsvpFlag    = makeFlagFloat('RSVP',    'https://docs.google.com/forms/d/e/1FAIpQLSfQaeIDFJxX7nnDNOzcKEiSiPwTU9y8U3QgDFF5Dhq4auE6qw/viewform');
-        const venueFlag   = makeFlagFloat('Venue',   'https://www.villagessa.com/en');
-        const addressFlag = makeFlagFloat('Address', 'https://share.google/lapfiiHIJAlWy3pZ8');
+        const rsvpFlag     = makeFlagFloat('RSVP',      'https://docs.google.com/forms/d/e/1FAIpQLSfQaeIDFJxX7nnDNOzcKEiSiPwTU9y8U3QgDFF5Dhq4auE6qw/viewform');
+        const venueFlag    = makeFlagFloat('Venue',     'https://www.villagessa.com/en');
+        const addressFlag  = makeFlagFloat('Address',   'https://share.google/lapfiiHIJAlWy3pZ8');
+        const moreInfoFlag = makeFlagFloat('More Info', 'moreinfo.jpg');
 
-        const floats = [rsvpFlag, venueFlag, addressFlag];
+        const floats = [rsvpFlag, venueFlag, addressFlag, moreInfoFlag];
 
         function animate() {
             flags.forEach(f  => f.update());
