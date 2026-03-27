@@ -1,4 +1,17 @@
-<title>Georgia & Lachy</title> <style> body { margin: 0; padding: 0; overflow: hidden; background: white; display: flex; justify-content: center; align-items: center; }
+<title>Georgia & Lachy</title>
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="20"><rect width="10.66" height="20" x="0" y="0" fill="%23008C45"/><rect width="10.66" height="20" x="10.66" y="0" fill="%23F4F5F0"/><rect width="10.68" height="20" x="21.32" y="0" fill="%23CD212A"/></svg>') 0 0, auto;
+    }
+
     .flag {
         position: absolute;
         width: 80px;
@@ -6,37 +19,42 @@
         pointer-events: none;
         z-index: 1;
     }
-    
-    .postit {
-        position: relative;
-        z-index: 10;
-        max-width: 600px;
-        max-height: 400px;
-        width: auto;
-        height: auto;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-    /* Small Italian flag cursor */
-    body {
-        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="20"><rect width="10.66" height="20" x="0" y="0" fill="%23008C45"/><rect width="10.66" height="20" x="10.66" y="0" fill="%23F4F5F0"/><rect width="10.68" height="20" x="21.32" y="0" fill="%23CD212A"/></svg>') 0 0, auto;
-    }
+
     .centered-img {
         position: relative;
         z-index: 20;
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 100vw;
+        width: 90vw;
         height: 60vh;
         pointer-events: none;
     }
+
     .centered-img img {
-        max-width: 90vw;
+        max-width: 100vw;
         max-height: 60vh;
         width: auto;
         height: auto;
         border-radius: 12px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .flag-float {
+        position: absolute;
+        width: 72px;
+        height: 45px;
+        z-index: 2;
+        cursor: pointer;
+        border-radius: 6px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        transition: transform 0.15s, box-shadow 0.15s;
+        overflow: hidden;
+    }
+
+    .flag-float:hover {
+        transform: scale(1.1);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.35);
     }
 </style>
 
@@ -44,9 +62,10 @@
     <div class="centered-img">
         <img src="postit-invite.jpg" alt="Save the date invitation" />
     </div>
+
     <script>
-        // Italian flag SVG
         const italianFlagSVG = `<svg xmlns='http://www.w3.org/2000/svg' width='80' height='50'><rect width='26.66' height='50' x='0' y='0' fill='#008C45'/><rect width='26.66' height='50' x='26.66' y='0' fill='#F4F5F0'/><rect width='26.68' height='50' x='53.32' y='0' fill='#CD212A'/></svg>`;
+
         class Flag {
             constructor() {
                 this.element = document.createElement('img');
@@ -54,8 +73,8 @@
                 this.element.src = 'data:image/svg+xml,' + encodeURIComponent(italianFlagSVG);
                 this.x = Math.random() * window.innerWidth;
                 this.y = Math.random() * window.innerHeight;
-                this.speedX = (Math.random() - 0.5) * 4;
-                this.speedY = (Math.random() - 0.5) * 4;
+                this.speedX = (Math.random() - 0.3) * 1;
+                this.speedY = (Math.random() - 0.5) * 1;
                 this.element.style.left = this.x + 'px';
                 this.element.style.top = this.y + 'px';
                 document.body.appendChild(this.element);
@@ -63,30 +82,68 @@
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
-                if (this.x <= 0 || this.x >= window.innerWidth - 80) {
-                    this.speedX = -this.speedX;
-                }
-                if (this.y <= 0 || this.y >= window.innerHeight - 50) {
-                    this.speedY = -this.speedY;
-                }
+                if (this.x <= 0 || this.x >= window.innerWidth - 80) this.speedX = -this.speedX;
+                if (this.y <= 0 || this.y >= window.innerHeight - 50) this.speedY = -this.speedY;
                 this.element.style.left = this.x + 'px';
                 this.element.style.top = this.y + 'px';
             }
         }
+
         const flags = [];
-        for (let i = 0; i < 15; i++) {
-            flags.push(new Flag());
+        for (let i = 0; i < 17; i++) flags.push(new Flag());
+
+        function makeFlagFloat(label, url) {
+            const W = 72, H = 45;
+            const el = document.createElement('div');
+            el.className = 'flag-float';
+            el.innerHTML = `
+                <div style="position:absolute;left:0;width:33.33%;height:100%;background:#008C45;"></div>
+                <div style="position:absolute;left:33.33%;width:33.33%;height:100%;background:#F4F5F0;"></div>
+                <div style="position:absolute;left:66.66%;width:33.34%;height:100%;background:#CD212A;"></div>
+                <span style="position:absolute;z-index:10;font-family:'Pinyon Script',cursive;color:black;text-align:center;width:100%;top:53%;left:50%;transform:translate(-50%,-50%);line-height:1;font-size:1.430rem;font-weight:500;">${label}</span>
+            `;
+            document.body.appendChild(el);
+            let x = Math.random() * (window.innerWidth - W);
+            let y = Math.random() * (window.innerHeight - H);
+            let sx = (Math.random() - 0.5) * 1.2;
+            let sy = (Math.random() - 0.5) * 1.2;
+            el.style.left = x + 'px';
+            el.style.top  = y + 'px';
+            el.addEventListener('click', () => window.open(url, '_blank'));
+            return { el, W, H,
+                update() {
+                    x += sx; y += sy;
+                    if (x <= 0 || x >= window.innerWidth - W)  sx = -sx;
+                    if (y <= 0 || y >= window.innerHeight - H) sy = -sy;
+                    el.style.left = x + 'px';
+                    el.style.top  = y + 'px';
+                },
+                clamp() {
+                    if (x > window.innerWidth - W)  x = window.innerWidth - W;
+                    if (y > window.innerHeight - H) y = window.innerHeight - H;
+                }
+            };
         }
+
+        const rsvpFlag    = makeFlagFloat('RSVP',    'https://docs.google.com/forms/d/e/1FAIpQLSfQaeIDFJxX7nnDNOzcKEiSiPwTU9y8U3QgDFF5Dhq4auE6qw/viewform');
+        const addressFlag = makeFlagFloat('Address', 'https://share.google/lapfiiHIJAlWy3pZ8');
+        const venueFlag   = makeFlagFloat('Venue',   'https://www.villagessa.com/en');
+
+        const floats = [rsvpFlag, addressFlag, venueFlag];
+
         function animate() {
-            flags.forEach(flag => flag.update());
+            flags.forEach(f => f.update());
+            floats.forEach(f => f.update());
             requestAnimationFrame(animate);
         }
         animate();
+
         window.addEventListener('resize', () => {
             flags.forEach(flag => {
                 if (flag.x > window.innerWidth - 80) flag.x = window.innerWidth - 80;
                 if (flag.y > window.innerHeight - 50) flag.y = window.innerHeight - 50;
             });
+            floats.forEach(f => f.clamp());
         });
     </script>
 </body>
