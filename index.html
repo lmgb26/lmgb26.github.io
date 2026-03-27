@@ -1,63 +1,64 @@
-<title>Georgia & Lachy</title>
-<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap" rel="stylesheet">
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="20"><rect width="10.66" height="20" x="0" y="0" fill="%23008C45"/><rect width="10.66" height="20" x="10.66" y="0" fill="%23F4F5F0"/><rect width="10.68" height="20" x="21.32" y="0" fill="%23CD212A"/></svg>') 0 0, auto;
-    }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Georgia & Lachy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="20"><rect width="10.66" height="20" x="0" y="0" fill="%23008C45"/><rect width="10.66" height="20" x="10.66" y="0" fill="%23F4F5F0"/><rect width="10.68" height="20" x="21.32" y="0" fill="%23CD212A"/></svg>') 0 0, auto;
+        }
 
-    .flag {
-        position: absolute;
-        width: 80px;
-        height: 50px;
-        pointer-events: none;
-        z-index: 1;
-    }
+        .flag {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1;
+        }
 
-    .centered-img {
-        position: relative;
-        z-index: 20;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 90vw;
-        height: 60vh;
-        pointer-events: none;
-    }
+        .centered-img {
+            position: relative;
+            z-index: 20;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 90vw;
+            height: 60vh;
+            pointer-events: none;
+        }
 
-    .centered-img img {
-        max-width: 100vw;
-        max-height: 60vh;
-        width: auto;
-        height: auto;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
+        .centered-img img {
+            max-width: 100vw;
+            max-height: 60vh;
+            width: auto;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
 
-    .flag-float {
-        position: absolute;
-        width: 72px;
-        height: 45px;
-        z-index: 2;
-        cursor: pointer;
-        border-radius: 6px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-        transition: transform 0.15s, box-shadow 0.15s;
-        overflow: hidden;
-    }
+        .flag-float {
+            position: absolute;
+            z-index: 2;
+            cursor: pointer;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            transition: transform 0.15s, box-shadow 0.15s;
+            overflow: hidden;
+        }
 
-    .flag-float:hover {
-        transform: scale(1.1);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.35);
-    }
-</style>
-
+        .flag-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+        }
+    </style>
+</head>
 <body>
     <div class="centered-img">
         <img src="postit-invite.jpg" alt="Save the date invitation" />
@@ -68,24 +69,30 @@
 
         class Flag {
             constructor() {
+                this.w = 60 + Math.random() * 40;
+                this.h = this.w * 0.625;
+
                 this.element = document.createElement('img');
                 this.element.className = 'flag';
                 this.element.src = 'data:image/svg+xml,' + encodeURIComponent(italianFlagSVG);
+                this.element.style.width  = this.w + 'px';
+                this.element.style.height = this.h + 'px';
+
                 this.x = Math.random() * window.innerWidth;
                 this.y = Math.random() * window.innerHeight;
-                this.speedX = (Math.random() - 0.3) * 1;
-                this.speedY = (Math.random() - 0.5) * 1;
+                this.speedX = (Math.random() - 0.3) * 1 * 1.1;
+                this.speedY = (Math.random() - 0.5) * 1 * 1.1;
                 this.element.style.left = this.x + 'px';
-                this.element.style.top = this.y + 'px';
+                this.element.style.top  = this.y + 'px';
                 document.body.appendChild(this.element);
             }
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
-                if (this.x <= 0 || this.x >= window.innerWidth - 80) this.speedX = -this.speedX;
-                if (this.y <= 0 || this.y >= window.innerHeight - 50) this.speedY = -this.speedY;
+                if (this.x <= 0 || this.x >= window.innerWidth  - this.w) this.speedX = -this.speedX;
+                if (this.y <= 0 || this.y >= window.innerHeight - this.h) this.speedY = -this.speedY;
                 this.element.style.left = this.x + 'px';
-                this.element.style.top = this.y + 'px';
+                this.element.style.top  = this.y + 'px';
             }
         }
 
@@ -93,9 +100,12 @@
         for (let i = 0; i < 17; i++) flags.push(new Flag());
 
         function makeFlagFloat(label, url) {
-            const W = 72, H = 45;
+            // 10% bigger than before (was 92×57.5)
+            const W = 101.2, H = 63.25;
             const el = document.createElement('div');
             el.className = 'flag-float';
+            el.style.width  = W + 'px';
+            el.style.height = H + 'px';
             el.innerHTML = `
                 <div style="position:absolute;left:0;width:33.33%;height:100%;background:#008C45;"></div>
                 <div style="position:absolute;left:33.33%;width:33.33%;height:100%;background:#F4F5F0;"></div>
@@ -103,23 +113,23 @@
                 <span style="position:absolute;z-index:10;font-family:'Pinyon Script',cursive;color:black;text-align:center;width:100%;top:53%;left:50%;transform:translate(-50%,-50%);line-height:1;font-size:1.430rem;font-weight:500;">${label}</span>
             `;
             document.body.appendChild(el);
-            let x = Math.random() * (window.innerWidth - W);
+            let x = Math.random() * (window.innerWidth  - W);
             let y = Math.random() * (window.innerHeight - H);
-            let sx = (Math.random() - 0.5) * 1.2;
-            let sy = (Math.random() - 0.5) * 1.2;
+            let sx = (Math.random() - 0.5) * 1.2 * 1.1;
+            let sy = (Math.random() - 0.5) * 1.2 * 1.1;
             el.style.left = x + 'px';
             el.style.top  = y + 'px';
             el.addEventListener('click', () => window.open(url, '_blank'));
             return { el, W, H,
                 update() {
                     x += sx; y += sy;
-                    if (x <= 0 || x >= window.innerWidth - W)  sx = -sx;
+                    if (x <= 0 || x >= window.innerWidth  - W) sx = -sx;
                     if (y <= 0 || y >= window.innerHeight - H) sy = -sy;
                     el.style.left = x + 'px';
                     el.style.top  = y + 'px';
                 },
                 clamp() {
-                    if (x > window.innerWidth - W)  x = window.innerWidth - W;
+                    if (x > window.innerWidth  - W) x = window.innerWidth  - W;
                     if (y > window.innerHeight - H) y = window.innerHeight - H;
                 }
             };
@@ -132,7 +142,7 @@
         const floats = [rsvpFlag, addressFlag, venueFlag];
 
         function animate() {
-            flags.forEach(f => f.update());
+            flags.forEach(f  => f.update());
             floats.forEach(f => f.update());
             requestAnimationFrame(animate);
         }
@@ -140,10 +150,11 @@
 
         window.addEventListener('resize', () => {
             flags.forEach(flag => {
-                if (flag.x > window.innerWidth - 80) flag.x = window.innerWidth - 80;
-                if (flag.y > window.innerHeight - 50) flag.y = window.innerHeight - 50;
+                if (flag.x > window.innerWidth  - flag.w) flag.x = window.innerWidth  - flag.w;
+                if (flag.y > window.innerHeight - flag.h) flag.y = window.innerHeight - flag.h;
             });
             floats.forEach(f => f.clamp());
         });
     </script>
 </body>
+</html>
