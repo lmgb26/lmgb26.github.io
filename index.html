@@ -14,6 +14,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 100vh;
             cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="20"><rect width="10.66" height="20" x="0" y="0" fill="%23008C45"/><rect width="10.66" height="20" x="10.66" y="0" fill="%23F4F5F0"/><rect width="10.68" height="20" x="21.32" y="0" fill="%23CD212A"/></svg>') 0 0, auto;
         }
 
@@ -100,8 +101,8 @@
         for (let i = 0; i < 17; i++) flags.push(new Flag());
 
         function makeFlagFloat(label, url) {
-            // 10% bigger than before (was 92×57.5)
-            const W = 101.2, H = 63.25;
+            // Another 10% bigger (was 101.2 × 63.25)
+            const W = 111.32, H = 69.58;
             const el = document.createElement('div');
             el.className = 'flag-float';
             el.style.width  = W + 'px';
