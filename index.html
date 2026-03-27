@@ -100,7 +100,7 @@
         }
 
         const flags = [];
-        for (let i = 0; i < 17; i++) flags.push(new Flag());
+        for (let i = 0; i < 15; i++) flags.push(new Flag());
 
         function getForbiddenZone() {
             const overlap = 75;
@@ -184,10 +184,10 @@
             };
         }
 
-        const rsvpFlag     = makeFlagFloat('RSVP',      'https://docs.google.com/forms/d/e/1FAIpQLSfQaeIDFJxX7nnDNOzcKEiSiPwTU9y8U3QgDFF5Dhq4auE6qw/viewform');
-        const venueFlag    = makeFlagFloat('Venue',     'https://www.villagessa.com/en');
-        const addressFlag  = makeFlagFloat('Address',   'https://share.google/lapfiiHIJAlWy3pZ8');
-        const moreInfoFlag = makeFlagFloat('More Info', 'moreinfo.jpg');
+        const rsvpFlag     = makeFlagFloat('RSVP',    'https://docs.google.com/forms/d/e/1FAIpQLSfQaeIDFJxX7nnDNOzcKEiSiPwTU9y8U3QgDFF5Dhq4auE6qw/viewform');
+        const venueFlag    = makeFlagFloat('Venue',   'https://www.villagessa.com/en');
+        const addressFlag  = makeFlagFloat('Address', 'https://share.google/lapfiiHIJAlWy3pZ8');
+        const moreInfoFlag = makeFlagFloat('Info',    'moreinfo.jpg');
 
         const floats = [rsvpFlag, venueFlag, addressFlag, moreInfoFlag];
 
