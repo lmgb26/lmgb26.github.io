@@ -102,9 +102,20 @@
         const flags = [];
         for (let i = 0; i < 17; i++) flags.push(new Flag());
 
-        // mode: 'top-horizontal' | 'left-vertical' | 'bottom-horizontal'
-        function makeFlagFloat(label, url, mode) {
-            // 10% smaller than before (was 105.80 × 66.13)
+        // Returns the forbidden zone — the post-it centre minus the allowed overlap (~75px ≈ 2cm)
+        function getForbiddenZone() {
+            const overlap = 75;
+            const cx = window.innerWidth  / 2;
+            const cy = window.innerHeight / 2;
+            return {
+                left:   cx - (window.innerWidth  * 0.45 - overlap),
+                right:  cx + (window.innerWidth  * 0.45 - overlap),
+                top:    cy - (window.innerHeight * 0.30 - overlap),
+                bottom: cy + (window.innerHeight * 0.30 - overlap),
+            };
+        }
+
+        function makeFlagFloat(label, url) {
             const W = 95.22, H = 59.52;
             const el = document.createElement('div');
             el.className = 'flag-float';
@@ -118,30 +129,19 @@
             `;
             document.body.appendChild(el);
 
-            const postItTop    = window.innerHeight * 0.5 - window.innerHeight * 0.3;
-            const postItBottom = window.innerHeight * 0.5 + window.innerHeight * 0.3;
-            const postItLeft   = window.innerWidth  * 0.5 - window.innerWidth  * 0.45;
-
-            let x, y, sx = 0, sy = 0;
-
-            if (mode === 'top-horizontal') {
-                // side to side, slightly overlapping the top of the post-it
-                y = postItTop - H * 0.6;
-                x = Math.random() * (window.innerWidth - W);
-                sx = 1.4;
-            } else if (mode === 'left-vertical') {
-                // up and down, slightly overlapping the left edge of the post-it
-                x = postItLeft - W * 0.6;
-                if (x < 0) x = 0;
+            // Start outside the forbidden zone
+            let x, y;
+            const fz = getForbiddenZone();
+            do {
+                x = Math.random() * (window.innerWidth  - W);
                 y = Math.random() * (window.innerHeight - H);
-                sy = 1.4;
-            } else if (mode === 'bottom-horizontal') {
-                // side to side below the post-it, not overlapping
-                y = postItBottom + 10;
-                if (y > window.innerHeight - H) y = window.innerHeight - H;
-                x = Math.random() * (window.innerWidth - W);
-                sx = 1.4;
-            }
+            } while (x + W > fz.left && x < fz.right && y + H > fz.top && y < fz.bottom);
+
+            let sx = (Math.random() - 0.5) * 1.32;
+            let sy = (Math.random() - 0.5) * 1.32;
+            // Make sure neither speed is too close to zero
+            if (Math.abs(sx) < 0.4) sx = sx < 0 ? -0.4 : 0.4;
+            if (Math.abs(sy) < 0.4) sy = sy < 0 ? -0.4 : 0.4;
 
             el.style.left = x + 'px';
             el.style.top  = y + 'px';
@@ -151,8 +151,36 @@
                 update() {
                     x += sx;
                     y += sy;
-                    if (sx !== 0 && (x <= 0 || x >= window.innerWidth  - W)) sx = -sx;
-                    if (sy !== 0 && (y <= 0 || y >= window.innerHeight - H)) sy = -sy;
+
+                    // Bounce off screen edges
+                    if (x <= 0 || x >= window.innerWidth  - W) sx = -sx;
+                    if (y <= 0 || y >= window.innerHeight - H) sy = -sy;
+
+                    // Bounce off forbidden zone (post-it centre)
+                    const fz = getForbiddenZone();
+                    const inX = x + W > fz.left && x < fz.right;
+                    const inY = y + H > fz.top  && y < fz.bottom;
+
+                    if (inX && inY) {
+                        // Find which axis has the smallest penetration and bounce that axis
+                        const dLeft   = (x + W) - fz.left;
+                        const dRight  = fz.right  - x;
+                        const dTop    = (y + H)   - fz.top;
+                        const dBottom = fz.bottom  - y;
+
+                        const minH = Math.min(dLeft, dRight);
+                        const minV = Math.min(dTop,  dBottom);
+
+                        if (minH <= minV) {
+                            sx = -sx;
+                            // Push out so we don't get stuck
+                            x += sx * 2;
+                        } else {
+                            sy = -sy;
+                            y += sy * 2;
+                        }
+                    }
+
                     el.style.left = x + 'px';
                     el.style.top  = y + 'px';
                 },
@@ -163,9 +191,9 @@
             };
         }
 
-        const rsvpFlag    = makeFlagFloat('RSVP',    'https://docs.google.com/forms/d/e/1FAIpQLSfQaeIDFJxX7nnDNOzcKEiSiPwTU9y8U3QgDFF5Dhq4auE6qw/viewform', 'top-horizontal');
-        const venueFlag   = makeFlagFloat('Venue',   'https://www.villagessa.com/en',                                                                          'left-vertical');
-        const addressFlag = makeFlagFloat('Address', 'https://share.google/lapfiiHIJAlWy3pZ8',                                                                 'bottom-horizontal');
+        const rsvpFlag    = makeFlagFloat('RSVP',    'https://docs.google.com/forms/d/e/1FAIpQLSfQaeIDFJxX7nnDNOzcKEiSiPwTU9y8U3QgDFF5Dhq4auE6qw/viewform');
+        const venueFlag   = makeFlagFloat('Venue',   'https://www.villagessa.com/en');
+        const addressFlag = makeFlagFloat('Address', 'https://share.google/lapfiiHIJAlWy3pZ8');
 
         const floats = [rsvpFlag, venueFlag, addressFlag];
 
