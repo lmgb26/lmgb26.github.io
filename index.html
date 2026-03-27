@@ -1,5 +1,4 @@
 <title>Georgia & Lachy</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap" rel="stylesheet">
 <style>
     body {
@@ -15,10 +14,9 @@
 
     .flag {
         position: absolute;
-        width: 80px;
-        height: 50px;
         pointer-events: none;
         z-index: 1;
+        display: block;
     }
 
     .centered-img {
@@ -43,8 +41,6 @@
 
     .flag-float {
         position: absolute;
-        width: 80px;
-        height: 50px;
         z-index: 2;
         cursor: pointer;
         border-radius: 6px;
@@ -65,28 +61,38 @@
     </div>
 
     <script>
-        const italianFlagSVG = `<svg xmlns='http://www.w3.org/2000/svg' width='80' height='50'><rect width='26.66' height='50' x='0' y='0' fill='#008C45'/><rect width='26.66' height='50' x='26.66' y='0' fill='#F4F5F0'/><rect width='26.68' height='50' x='53.32' y='0' fill='#CD212A'/></svg>`;
+        // viewBox added so SVG scales correctly on live/served environments
+        const italianFlagSVG = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 50' preserveAspectRatio='none'><rect width='26.66' height='50' x='0' y='0' fill='#008C45'/><rect width='26.66' height='50' x='26.66' y='0' fill='#F4F5F0'/><rect width='26.68' height='50' x='53.32' y='0' fill='#CD212A'/></svg>`;
 
         class Flag {
             constructor() {
+                // Random size between 75–115px wide, proportional height
+                this.w = 75 + Math.random() * 40;
+                this.h = this.w * 0.625;
+
                 this.element = document.createElement('img');
                 this.element.className = 'flag';
+                this.element.setAttribute('width',  Math.round(this.w));
+                this.element.setAttribute('height', Math.round(this.h));
+                this.element.style.width  = this.w + 'px';
+                this.element.style.height = this.h + 'px';
                 this.element.src = 'data:image/svg+xml,' + encodeURIComponent(italianFlagSVG);
-                this.x = Math.random() * window.innerWidth;
-                this.y = Math.random() * window.innerHeight;
-                this.speedX = (Math.random() - 0.3) * 1;
-                this.speedY = (Math.random() - 0.5) * 1;
+
+                this.x = Math.random() * (window.innerWidth  - this.w);
+                this.y = Math.random() * (window.innerHeight - this.h);
+                this.speedX = (Math.random() - 0.3) * 1.1;
+                this.speedY = (Math.random() - 0.5) * 1.1;
                 this.element.style.left = this.x + 'px';
-                this.element.style.top = this.y + 'px';
+                this.element.style.top  = this.y + 'px';
                 document.body.appendChild(this.element);
             }
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
-                if (this.x <= 0 || this.x >= window.innerWidth - 80) this.speedX = -this.speedX;
-                if (this.y <= 0 || this.y >= window.innerHeight - 50) this.speedY = -this.speedY;
+                if (this.x <= 0 || this.x >= window.innerWidth  - this.w) this.speedX = -this.speedX;
+                if (this.y <= 0 || this.y >= window.innerHeight - this.h) this.speedY = -this.speedY;
                 this.element.style.left = this.x + 'px';
-                this.element.style.top = this.y + 'px';
+                this.element.style.top  = this.y + 'px';
             }
         }
 
@@ -94,33 +100,36 @@
         for (let i = 0; i < 17; i++) flags.push(new Flag());
 
         function makeFlagFloat(label, url) {
-            const W = 80, H = 50;
+            // 15% bigger than 80×50 baseline = 92×57.5
+            const W = 92, H = 57.5;
             const el = document.createElement('div');
             el.className = 'flag-float';
+            el.style.width  = W + 'px';
+            el.style.height = H + 'px';
             el.innerHTML = `
-                <div style="position:absolute;left:0;width:33.33%;height:100%;background:#008C45;"></div>
-                <div style="position:absolute;left:33.33%;width:33.33%;height:100%;background:#F4F5F0;"></div>
-                <div style="position:absolute;left:66.66%;width:33.34%;height:100%;background:#CD212A;"></div>
-                <span style="position:absolute;z-index:10;font-family:'Pinyon Script',cursive;color:black;text-align:center;width:100%;top:53%;left:50%;transform:translate(-50%,-50%);line-height:1;font-size:13px;font-weight:500;">${label}</span>
+                <div style="position:absolute;left:0;top:0;width:33.33%;height:100%;background:#008C45;"></div>
+                <div style="position:absolute;left:33.33%;top:0;width:33.33%;height:100%;background:#F4F5F0;"></div>
+                <div style="position:absolute;left:66.66%;top:0;width:33.34%;height:100%;background:#CD212A;"></div>
+                <span style="position:absolute;z-index:10;font-family:'Pinyon Script',cursive;color:black;text-align:center;width:100%;top:50%;left:50%;transform:translate(-50%,-50%);line-height:1;font-size:1.43rem;font-weight:500;">${label}</span>
             `;
             document.body.appendChild(el);
-            let x = Math.random() * (window.innerWidth - W);
+            let x = Math.random() * (window.innerWidth  - W);
             let y = Math.random() * (window.innerHeight - H);
-            let sx = (Math.random() - 0.5) * 1.2;
-            let sy = (Math.random() - 0.5) * 1.2;
+            let sx = (Math.random() - 0.5) * 1.32;
+            let sy = (Math.random() - 0.5) * 1.32;
             el.style.left = x + 'px';
             el.style.top  = y + 'px';
             el.addEventListener('click', () => window.open(url, '_blank'));
             return { el, W, H,
                 update() {
                     x += sx; y += sy;
-                    if (x <= 0 || x >= window.innerWidth - W)  sx = -sx;
+                    if (x <= 0 || x >= window.innerWidth  - W) sx = -sx;
                     if (y <= 0 || y >= window.innerHeight - H) sy = -sy;
                     el.style.left = x + 'px';
                     el.style.top  = y + 'px';
                 },
                 clamp() {
-                    if (x > window.innerWidth - W)  x = window.innerWidth - W;
+                    if (x > window.innerWidth  - W) x = window.innerWidth  - W;
                     if (y > window.innerHeight - H) y = window.innerHeight - H;
                 }
             };
@@ -133,7 +142,7 @@
         const floats = [rsvpFlag, addressFlag, venueFlag];
 
         function animate() {
-            flags.forEach(f => f.update());
+            flags.forEach(f  => f.update());
             floats.forEach(f => f.update());
             requestAnimationFrame(animate);
         }
@@ -141,8 +150,8 @@
 
         window.addEventListener('resize', () => {
             flags.forEach(flag => {
-                if (flag.x > window.innerWidth - 80) flag.x = window.innerWidth - 80;
-                if (flag.y > window.innerHeight - 50) flag.y = window.innerHeight - 50;
+                if (flag.x > window.innerWidth  - flag.w) flag.x = window.innerWidth  - flag.w;
+                if (flag.y > window.innerHeight - flag.h) flag.y = window.innerHeight - flag.h;
             });
             floats.forEach(f => f.clamp());
         });
