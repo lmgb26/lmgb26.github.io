@@ -74,8 +74,8 @@
                 this.element.src = 'data:image/svg+xml,' + encodeURIComponent(italianFlagSVG);
                 this.x = Math.random() * window.innerWidth;
                 this.y = Math.random() * window.innerHeight;
-                this.speedX = (Math.random() - 0.3) * 1;
-                this.speedY = (Math.random() - 0.5) * 1;
+                this.speedX = (Math.random() - 0.3) * 1.4;
+                this.speedY = (Math.random() - 0.5) * 1.4;
                 this.element.style.left = this.x + 'px';
                 this.element.style.top = this.y + 'px';
                 document.body.appendChild(this.element);
@@ -106,8 +106,8 @@
             document.body.appendChild(el);
             let x = Math.random() * (window.innerWidth - W);
             let y = Math.random() * (window.innerHeight - H);
-            let sx = (Math.random() - 0.5) * 1.2;
-            let sy = (Math.random() - 0.5) * 1.2;
+            let sx = (Math.random() - 0.5) * 1.0;
+            let sy = (Math.random() - 0.5) * 1.0;
             el.style.left = x + 'px';
             el.style.top  = y + 'px';
             el.addEventListener('click', () => window.open(url, '_blank'));
