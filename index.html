@@ -102,9 +102,10 @@
         const flags = [];
         for (let i = 0; i < 17; i++) flags.push(new Flag());
 
-        function makeFlagFloat(label, url) {
-            // 12% smaller than before (was 120.23 × 75.15)
-            const W = 105.80, H = 66.13;
+        // mode: 'top-horizontal' | 'left-vertical' | 'bottom-horizontal'
+        function makeFlagFloat(label, url, mode) {
+            // 10% smaller than before (was 105.80 × 66.13)
+            const W = 95.22, H = 59.52;
             const el = document.createElement('div');
             el.className = 'flag-float';
             el.style.width  = W + 'px';
@@ -116,18 +117,42 @@
                 <span style="position:absolute;z-index:10;font-family:'Pinyon Script',cursive;color:black;text-align:center;width:100%;top:53%;left:50%;transform:translate(-50%,-50%);line-height:1;font-size:1.730rem;font-weight:500;">${label}</span>
             `;
             document.body.appendChild(el);
-            let x = Math.random() * (window.innerWidth  - W);
-            let y = Math.random() * (window.innerHeight - H);
-            let sx = (Math.random() - 0.5) * 1.32;
-            let sy = (Math.random() - 0.5) * 1.32;
+
+            const postItTop    = window.innerHeight * 0.5 - window.innerHeight * 0.3;
+            const postItBottom = window.innerHeight * 0.5 + window.innerHeight * 0.3;
+            const postItLeft   = window.innerWidth  * 0.5 - window.innerWidth  * 0.45;
+
+            let x, y, sx = 0, sy = 0;
+
+            if (mode === 'top-horizontal') {
+                // side to side, slightly overlapping the top of the post-it
+                y = postItTop - H * 0.6;
+                x = Math.random() * (window.innerWidth - W);
+                sx = 1.4;
+            } else if (mode === 'left-vertical') {
+                // up and down, slightly overlapping the left edge of the post-it
+                x = postItLeft - W * 0.6;
+                if (x < 0) x = 0;
+                y = Math.random() * (window.innerHeight - H);
+                sy = 1.4;
+            } else if (mode === 'bottom-horizontal') {
+                // side to side below the post-it, not overlapping
+                y = postItBottom + 10;
+                if (y > window.innerHeight - H) y = window.innerHeight - H;
+                x = Math.random() * (window.innerWidth - W);
+                sx = 1.4;
+            }
+
             el.style.left = x + 'px';
             el.style.top  = y + 'px';
             el.addEventListener('click', () => window.open(url, '_blank'));
+
             return { el, W, H,
                 update() {
-                    x += sx; y += sy;
-                    if (x <= 0 || x >= window.innerWidth  - W) sx = -sx;
-                    if (y <= 0 || y >= window.innerHeight - H) sy = -sy;
+                    x += sx;
+                    y += sy;
+                    if (sx !== 0 && (x <= 0 || x >= window.innerWidth  - W)) sx = -sx;
+                    if (sy !== 0 && (y <= 0 || y >= window.innerHeight - H)) sy = -sy;
                     el.style.left = x + 'px';
                     el.style.top  = y + 'px';
                 },
@@ -138,11 +163,11 @@
             };
         }
 
-        const rsvpFlag    = makeFlagFloat('RSVP',    'https://docs.google.com/forms/d/e/1FAIpQLSfQaeIDFJxX7nnDNOzcKEiSiPwTU9y8U3QgDFF5Dhq4auE6qw/viewform');
-        const addressFlag = makeFlagFloat('Address', 'https://share.google/lapfiiHIJAlWy3pZ8');
-        const venueFlag   = makeFlagFloat('Venue',   'https://www.villagessa.com/en');
+        const rsvpFlag    = makeFlagFloat('RSVP',    'https://docs.google.com/forms/d/e/1FAIpQLSfQaeIDFJxX7nnDNOzcKEiSiPwTU9y8U3QgDFF5Dhq4auE6qw/viewform', 'top-horizontal');
+        const venueFlag   = makeFlagFloat('Venue',   'https://www.villagessa.com/en',                                                                          'left-vertical');
+        const addressFlag = makeFlagFloat('Address', 'https://share.google/lapfiiHIJAlWy3pZ8',                                                                 'bottom-horizontal');
 
-        const floats = [rsvpFlag, addressFlag, venueFlag];
+        const floats = [rsvpFlag, venueFlag, addressFlag];
 
         function animate() {
             flags.forEach(f  => f.update());
