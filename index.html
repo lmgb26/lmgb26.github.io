@@ -11,10 +11,6 @@
             padding: 0;
             overflow: hidden;
             background: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="20"><rect width="10.66" height="20" x="0" y="0" fill="%23008C45"/><rect width="10.66" height="20" x="10.66" y="0" fill="%23F4F5F0"/><rect width="10.68" height="20" x="21.32" y="0" fill="%23CD212A"/></svg>') 0 0, auto;
         }
 
@@ -25,7 +21,10 @@
         }
 
         .centered-img {
-            position: relative;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             z-index: 20;
             display: flex;
             justify-content: center;
@@ -36,7 +35,7 @@
         }
 
         .centered-img img {
-            max-width: 100vw;
+            max-width: 90vw;
             max-height: 60vh;
             width: auto;
             height: auto;
@@ -93,69 +92,4 @@
                 if (this.x <= 0 || this.x >= window.innerWidth  - this.w) this.speedX = -this.speedX;
                 if (this.y <= 0 || this.y >= window.innerHeight - this.h) this.speedY = -this.speedY;
                 this.element.style.left = this.x + 'px';
-                this.element.style.top  = this.y + 'px';
-            }
-        }
-
-        const flags = [];
-        for (let i = 0; i < 17; i++) flags.push(new Flag());
-
-        function makeFlagFloat(label, url) {
-            // Another 10% bigger (was 101.2 × 63.25)
-            const W = 111.32, H = 69.58;
-            const el = document.createElement('div');
-            el.className = 'flag-float';
-            el.style.width  = W + 'px';
-            el.style.height = H + 'px';
-            el.innerHTML = `
-                <div style="position:absolute;left:0;width:33.33%;height:100%;background:#008C45;"></div>
-                <div style="position:absolute;left:33.33%;width:33.33%;height:100%;background:#F4F5F0;"></div>
-                <div style="position:absolute;left:66.66%;width:33.34%;height:100%;background:#CD212A;"></div>
-                <span style="position:absolute;z-index:10;font-family:'Pinyon Script',cursive;color:black;text-align:center;width:100%;top:53%;left:50%;transform:translate(-50%,-50%);line-height:1;font-size:1.430rem;font-weight:500;">${label}</span>
-            `;
-            document.body.appendChild(el);
-            let x = Math.random() * (window.innerWidth  - W);
-            let y = Math.random() * (window.innerHeight - H);
-            let sx = (Math.random() - 0.5) * 1.2 * 1.1;
-            let sy = (Math.random() - 0.5) * 1.2 * 1.1;
-            el.style.left = x + 'px';
-            el.style.top  = y + 'px';
-            el.addEventListener('click', () => window.open(url, '_blank'));
-            return { el, W, H,
-                update() {
-                    x += sx; y += sy;
-                    if (x <= 0 || x >= window.innerWidth  - W) sx = -sx;
-                    if (y <= 0 || y >= window.innerHeight - H) sy = -sy;
-                    el.style.left = x + 'px';
-                    el.style.top  = y + 'px';
-                },
-                clamp() {
-                    if (x > window.innerWidth  - W) x = window.innerWidth  - W;
-                    if (y > window.innerHeight - H) y = window.innerHeight - H;
-                }
-            };
-        }
-
-        const rsvpFlag    = makeFlagFloat('RSVP',    'https://docs.google.com/forms/d/e/1FAIpQLSfQaeIDFJxX7nnDNOzcKEiSiPwTU9y8U3QgDFF5Dhq4auE6qw/viewform');
-        const addressFlag = makeFlagFloat('Address', 'https://share.google/lapfiiHIJAlWy3pZ8');
-        const venueFlag   = makeFlagFloat('Venue',   'https://www.villagessa.com/en');
-
-        const floats = [rsvpFlag, addressFlag, venueFlag];
-
-        function animate() {
-            flags.forEach(f  => f.update());
-            floats.forEach(f => f.update());
-            requestAnimationFrame(animate);
-        }
-        animate();
-
-        window.addEventListener('resize', () => {
-            flags.forEach(flag => {
-                if (flag.x > window.innerWidth  - flag.w) flag.x = window.innerWidth  - flag.w;
-                if (flag.y > window.innerHeight - flag.h) flag.y = window.innerHeight - flag.h;
-            });
-            floats.forEach(f => f.clamp());
-        });
-    </script>
-</body>
-</html>
+                this.element.style.top  = this.y + 'px
