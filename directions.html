@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Directions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background: white;
+      color: #111;
+      font-family: 'Cormorant Garamond', serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .page {
+      width: min(900px, 88vw);
+      padding: 70px 20px 80px;
+      text-align: center;
+    }
+
+      .back-arrow {
+      position: fixed;
+      top: 22px;
+      left: 22px;
+      text-decoration: none;
+      color: rgba(0, 0, 0, 0.65);
+      font-size: 1.8rem;
+      line-height: 1;
+      z-index: 100;
+      transition: transform 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+      opacity: 0.75;
+      font-family: serif;
+    }
+
+    .back-arrow:hover {
+      transform: translateX(-3px);
+      color: rgba(0, 0, 0, 0.95);
+      opacity: 1;
+    }
+    
+
+    .intro {
+      font-size: 1.25rem;
+      font-style: italic;
+      margin-bottom: 36px;
+    }
+
+    .map-wrap {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto 28px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+      background: #f8f8f8;
+    }
+
+    .map-wrap iframe {
+      width: 100%;
+      height: 520px;
+      border: 0;
+      display: block;
+    }
+
+    .details {
+      max-width: 760px;
+      margin: 0 auto;
+      font-style: italic;
+      font-size: 1.08rem;
+      line-height: 1.7;
+    }
+
+    .details p {
+      margin: 0 0 14px;
+    }
+
+    .open-link {
+      display: inline-block;
+      margin-top: 14px;
+      text-decoration: none;
+      color: #111;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+      padding-bottom: 2px;
+      transition: opacity 0.15s ease, border-color 0.15s ease;
+    }
+
+    .open-link:hover {
+      opacity: 0.65;
+      border-color: rgba(0, 0, 0, 0.55);
+    }
+
+    @media (max-width: 600px) {
+      .back-arrow {
+        top: 18px;
+        left: 18px;
+        font-size: 1.6rem;
+      }
+
+      .page {
+        padding: 70px 18px 70px;
+      }
+
+      .intro {
+        font-size: 1.15rem;
+        margin-bottom: 28px;
+      }
+
+      .map-wrap iframe {
+        height: 420px;
+      }
+
+      .details {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back-arrow" aria-label="Go back">‹</a>
+
+  <div class="page">
+    <p class="intro">Directions</p>
+
+    <div class="map-wrap">
+      <iframe
+        src="https://www.google.com/maps?q=Villa+Gessa&output=embed"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+
+    <div class="details">
+      <p>Villa Gessa is located in the Colli Bolognesi, the hills just outside Bologna.</p>
+      <p>The venue is a 35-min drive from Bologna, and the closest train station is Muffa (5min drive / 20minute walk).</p>
+      <p>For those staying in the surrounding small towns there there's a variety of local transports and taxis available.</p>
+
+      <a
+        class="open-link"
+        href="https://www.google.com/maps/place/Villa+Gessa/@44.5002153,11.1034795,16.6z/data=!4m6!3m5!1s0x477fd9648e00a143:0x5404ea5be3596be3!8m2!3d44.5006087!4d11.1042628!16s%2Fg%2F11j3v8dv40?entry=ttu&g_ep=EgoyMDI2MDMyMy4xIKXMDSoASAFQAw%3D%3D"
+        target="_blank"
+        rel="noopener noreferrer">
+        Open in Google Maps
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>
